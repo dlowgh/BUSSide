@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import time
 import struct
@@ -45,8 +45,10 @@ def keys_cleanup():
     global oldterm
     global oldflags
 
-    termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
-    fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
+    # termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
+    # fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
+    termios.tcsetattr(None, termios.TCSAFLUSH, oldterm)
+    fcntl.fcntl(None, fcntl.F_SETFL, oldflags)
 
 def set_sequence_number(seq):
     global sequence_number

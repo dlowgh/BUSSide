@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import bs
 import binascii
@@ -39,8 +39,8 @@ def spi_dump_flash(dumpsize, outfile):
             f.flush()
             skip = skip + BLOCKSIZE
             dumpsize = dumpsize - size 
-	print("+++ SUCCESS\n")
-	return (1, 1)
+    print("+++ SUCCESS\n")
+    return (1, 1)
 
 def spi_read_id():
     print("+++ Sending SPI read ID command")
