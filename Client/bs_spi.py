@@ -43,7 +43,7 @@ def spi_dump_flash(dumpsize, outfile):
             dumpsize = dumpsize - size
             counter += 1
             if counter == 100:
-                print(f"Progress: {((initial_dump_size - dumpsize) / initial_dump_size):.2f}%")
+                print(f"Progress: {(((initial_dump_size - dumpsize) * 100) / initial_dump_size):.2f}%")
                 counter = 0
     print("+++ SUCCESS\n")
     return (1, 1)
