@@ -73,7 +73,7 @@ def FlushInput():
     myserial.flushInput()
 
 def FlushOutput():
-    global myserisl
+    global myserial
 
     myserial.flushOutput()
 
@@ -86,7 +86,7 @@ def Sync():
         return False
     return ord(ch1) == 0xfe and ord(ch2) == 0xca
 
-def requestreply(command, request_args, nretries=10):
+def request_reply(command, request_args, nretries=10):
     global myserial
     global mydevice
     global mytimeout
@@ -107,12 +107,12 @@ def requestreply(command, request_args, nretries=10):
                     continue
 
         # build beginning
-        bs_sync = "\xfe\xca"
+        bs_sync = b"\xfe\xca"
         bs_command = struct.pack('<I', command)
         bs_command_length = struct.pack('<I', len(request_args) * 4)
-        bs_request_args = ""
+        bs_request_args = b""
         for i in range(len(request_args)):
-            bs_request_args += struct.pack('<I', request_args[i])
+            bs_request_args += struct.pack('<I', int(request_args[i]))
 
         # calculate crc
         request  = bs_command
@@ -128,7 +128,7 @@ def requestreply(command, request_args, nretries=10):
         request  = bs_command
         request += bs_command_length
         request += struct.pack('<I', saved_sequence_number)
-        request += struct.pack('<i', crc)
+        request += struct.pack('<I', crc)
         request += bs_request_args
 
         myserial.write(bs_sync + request)
@@ -157,13 +157,13 @@ def requestreply(command, request_args, nretries=10):
         bs_checksum, = struct.unpack('<i', d)
      
         # read reply payload
-        reply_args = ""
+        reply_args = b""
         if reply_length == 0:
             bs_reply_args = []
         else:
-            bs_reply_args = list(range(reply_length / 4))
+            bs_reply_args = list(range(int(reply_length / 4)))
             fail = False
-            for i in range(reply_length / 4):
+            for i in range(int(reply_length / 4)):
                 s = myserial.read(4)
                 if len(s) != 4:
                     fail = True
@@ -229,7 +229,7 @@ def Connect(device, ltimeout=2, nretries=10):
 
             if nretries > 0:
                 print("+++ Sending echo command")
-                rv = requestreply(0, request_args, 1)
+                rv = request_reply(0, request_args, 1)
                 if rv is None:
                     myserial.close()
                     continue
@@ -237,6 +237,7 @@ def Connect(device, ltimeout=2, nretries=10):
                 print("+++ OK")
                 return rv
             return (1,1)
-        except:
+        except Exception as e:
+            print(e)
             pass
     return None

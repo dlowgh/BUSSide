@@ -1,18 +1,17 @@
 #!/usr/bin/python3
 
-import struct
-import os
+import os, sys, struct
 import sys
 import bs_i2c
 import bs_uart
 import bs_jtag
-import bs
 import bs_spi
+import bs
 
 sequence_number = 5
 
 if len(sys.argv) != 2:
-    print("Usage: %s <serdevice>" % (sys.argv[0]))
+    print(f"Usage: {sys.argv[0]} <serial_device>")
     sys.exit(0)
 
 device = sys.argv[1]
@@ -46,7 +45,7 @@ def printHelp():
     print("+++ > quit")
     print("+++")
 
-def doCommand(command):
+def doCommand(command: str):
     if command.find("spi ") == 0:
         return bs_spi.doCommand(command[4:])
     elif command.find("i2c ") == 0:

@@ -13,7 +13,7 @@ WRITEBLOCKSIZE=512
 def i2c_discover_slaves(sda, scl):
     print("+++ Sending i2c slave discovery command")
     request_args = [sda, scl]
-    rv = bs.requestreply(5, request_args)
+    rv = bs.request_reply(5, request_args)
     if rv is None:
         return None
     (bs_reply_length, bs_reply_args) = rv
@@ -29,12 +29,12 @@ def i2c_discover():
     print("+++ Sending i2c discover pinout command")
     request_args = []
     bs.NewTimeout(30)
-    rv = bs.requestreply(23, request_args)
+    rv = bs.request_reply(23, request_args)
     if rv is None:
         return None
     (bs_reply_length, bs_reply_args) = rv
 
-    n = bs_reply_length / 8
+    n = int(bs_reply_length / 8)
     print("+++ FOUND %d I2C interfaces" % (n))
     for i in range(n):
         sda = bs_reply_args[i*2 + 0]
@@ -87,13 +87,13 @@ def writeI2C(sda, scl, slave, size, skip, alen, data):
     request_args[5] = alen
     for i in range(size / 4):
         request_args[6 + i] = data[i]
-    rv = bs.requestreply(25, request_args)
+    rv = bs.request_reply(25, request_args)
     return rv
 
 def dumpI2C(sda, scl, slave, size, skip, alen):
     data = ""
     request_args = [slave, size, skip, sda, scl, alen]
-    rv = bs.requestreply(9, request_args)
+    rv = bs.request_reply(9, request_args)
     if rv is None:
         return None
     (bs_reply_length, bs_reply_args) = rv
@@ -149,4 +149,3 @@ def i2c_write_flash(sda, scl, slave, alen, dumpsize, infile):
             dumpsize = dumpsize - size 
         print("+++ SUCCESS\n")
         return (1, 1)
-

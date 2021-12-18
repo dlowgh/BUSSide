@@ -11,7 +11,7 @@ def uart_data_discover():
     print("+++ Sending UART data discovery command")
     request_args = []
     bs.NewTimeout(60)
-    rv = bs.requestreply(15, request_args)
+    rv = bs.request_reply(15, request_args)
     if rv is None:
         return None
     (bs_reply_length, bs_reply_args) = rv
@@ -27,7 +27,7 @@ def uart_tx(rxpin, baudrate):
     print("+++ Sending UART discovery tx command")
     request_args = [rxpin, baudrate]
     bs.NewTimeout(3)
-    rv = bs.requestreply(21, request_args)
+    rv = bs.request_reply(21, request_args)
     if rv is None:
         return None
     (bs_reply_length, bs_reply_args) = rv
@@ -44,7 +44,7 @@ def uart_rx():
     print("+++ Sending UART discovery rx command")
     request_args = []
     bs.NewTimeout(120)
-    rv = bs.requestreply(11, request_args)
+    rv = bs.request_reply(11, request_args)
     if rv is None:
         return None
     (bs_reply_length, bs_reply_args) = rv
@@ -75,7 +75,7 @@ def uart_rx():
 def uart_passthrough(gpiorx, gpiotx, baudrate):
     request_args = [gpiorx-1, gpiotx-1, baudrate]
     bs.NewTimeout(30)
-    rv = bs.requestreply(19, request_args)
+    rv = bs.request_reply(19, request_args)
     if rv is None:
         return None
     (bs_reply_length, bs_reply_args) = rv
